@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: node-port-scanner
+  name: node-port-scanner
+  namespace: sre
+spec:
+  selector:
+    matchLabels:
+      app: node-port-scanner
+  template:
+    metadata:
+      labels:
+        app: node-port-scanner
+    spec:
+      hostNetwork: true
+      containers:
+      - image: ismaelfm/node-port-scanner:0.3.0
+        name: node-port-scanner
+        envFrom:
+        - configMapRef: 
+            name: node-port-scanner
+        - secretRef:
+            name: node-port-scanner
+        resources: {}

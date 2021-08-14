@@ -1,0 +1,35 @@
+name: "Terratest"
+on:
+  push:
+  pull_request:
+    - branches:
+      - main
+env:
+  tf_version: "0.13.5"
+  tf_working_dir: "."
+  AWS_REGION: "us-east-2"
+
+jobs:
+  terratest:
+    name: "Terratest"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+
+      - name: "terratest"
+        run: |
+          docker-compose up -d localstack
+          cd infrastructure/aws/test
+          go test 
+        env: 
+          TF_VAR_aws_access_key: test
+          TF_VAR_aws_secret_key: test 
+          TF_VAR_s3_endpoint: http://localhost:4566
+          TF_VAR_sts_endpoint: http://localhost:4566
+          TF_VAR_skip_credentials_validation: true
+          TF_VAR_skip_metadata_api_check: true
+          TF_VAR_skip_requesting_account_id: true

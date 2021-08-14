@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: node-port-scanner
+  namespace: sre
+data:
+  ITERATION_TIME: "300"
+  AWS_REGION: "us-east-2"
+  AWS_ENDPOINT: "https://s3.us-east-2.amazonaws.com"
+  BUCKET_NAME: "node-port-scanner"
+    #  PORTS:
