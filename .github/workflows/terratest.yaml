@@ -2,7 +2,7 @@ name: "Terratest"
 on:
   push:
   pull_request:
-    - branches:
+    branches:
       - main
 env:
   tf_version: "0.13.5"
