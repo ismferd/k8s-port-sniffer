@@ -40,3 +40,7 @@ or
 ### Secrets
 
 * Remember to change values of (secret.yaml)[../infrastructure/kubernetes/secret.yaml]
+
+## Wathching ports opened
+
+- Currently, we don't have ingress, so you can do a port-forward in order to see the data stored on s3.

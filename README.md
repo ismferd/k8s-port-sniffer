@@ -10,10 +10,10 @@ Tool to scan ports opened at kubernetes nodes.
 
 ## How it works
 
-k8s-port-scanner runs over any k8s cluster as daemonset looking for opened ports and saving the result on a s3 bucket.
+k8s-port-scanner runs over any k8s cluster as daemonset looking for opened ports and saving the results on a s3 bucket.
 If you take a look into your bucket you should see as object as nodes you have, we are storing one file per node.
 
-k8s-port-scanner is listening for connections at port 8080. it has a subprocess to show you in a browser the relation node -> port.
+k8s-port-scanner is listening for connections at port 8080. It has a subprocess to show you in a browser the relation node -> ports.
 * In order achieve it you should do a `kubernetes port-forward pod 8080:8008`.
 
 ## Deployment
@@ -24,17 +24,17 @@ You will find more information reading the Makefile or in the [aws](doc/aws.md) 
 
 ## Infrastructure
 
-Under the folder [infrastructure](infrastructure) you will finde 2 folder more, once related with kubernetes and other with AWS
+Under the folder [infrastructure](infrastructure) you will find 2 folders more, once related with kubernetes and other with AWS.
 
 ### AWS
 
-Basically, you will find a terraform which build a s3 bucket where k8s-port-scanner store the information.
+Basically, you will find terraform files which build a s3 bucket where k8s-port-scanner store the information.
 
 Documentation about [aws](doc/aws.md)
 
 ### Kubernetes
 
-There, you will find all manifest to deploy k8s-port-scanner over Kubernetes.
+Here, you will find all manifest to deploy k8s-port-scanner over Kubernetes.
 
 * Note: Modify [secret.yaml](infrastructure/kubernetes/secret.yaml) before launch it and don't commit your secrets!.
 
