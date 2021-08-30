@@ -53,4 +53,3 @@ or running a container:
 ```
 docker run -e AWS_ACCESS_KEY_ID=YOUR_KEY -e AWS_SECRET_ACCESS_KEY=YOUR_SECRET -e ITERATION_TIME=60 -e AWS_REGION=region -e AWS_ENDPOINT=https://s3.us-east-2.amazonaws.com -e BUCKET_NAME=bucket_name ismaelfm/node-port-scanner:latest
 ```
-
