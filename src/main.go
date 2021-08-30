@@ -17,7 +17,11 @@ import (
 func main() {
 
 	host := os.Getenv("HOST")
-	iterationTime, _ := strconv.Atoi(os.Getenv("ITERATION_TIME"))
+	iterationTime, err := strconv.Atoi(os.Getenv("ITERATION_TIME"))
+	if err != nil {
+		log.Print("Iteration time needs to be an integer")
+		os.Exit(1)
+	}
 	region := os.Getenv("AWS_REGION")
 	s3Endpoint := os.Getenv("AWS_ENDPOINT")
 	bucketName := os.Getenv("BUCKET_NAME")
