@@ -17,8 +17,25 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: ismaelfm/node-port-scanner:0.3.0
+      - image: ismaelfm/node-port-scanner:latest
         name: node-port-scanner
+        resources:
+          limits:
+            cpu: "10m"
+            memory: "100Mi"
+        requests:
+            cpu: "1m"
+            memory: "50Mi"
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
         envFrom:
         - configMapRef: 
             name: node-port-scanner

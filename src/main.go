@@ -24,6 +24,27 @@ func main() {
 	s3Session := aws.S3Session(region, s3Endpoint)
 	portsWhitelisted := strings.Split(os.Getenv("PORTS"), ",")
 
+	if iterationTime < 60 {
+		log.Print("The loop time must be higher than 60")
+		os.Exit(1)
+	}
+
+	if region == "" {
+		log.Print("Var region must be informed")
+		os.Exit(1)
+	}
+
+	if s3Endpoint == "" {
+		log.Print("Var s3Endpoint must be informed. eg: https://s3.us-east-2.amazonaws.com")
+		os.Exit(1)
+	}
+
+	if bucketName == "" {
+		log.Print("Var bucketName must be informed")
+		os.Exit(1)
+	}
+	log.Printf("Current Configuration: \n iterationTime %d, region: %s, s3Endpoint: %s bucketName: %s", iterationTime, region, s3Endpoint, bucketName)
+
 	s3cli := aws.NewS3Cli(bucketName, s3Session, region)
 
 	go consumer.Consumer(s3cli)
@@ -39,7 +60,6 @@ func main() {
 		}
 
 		ps := producer.NewPortScanner(hostname, host, semaphore.NewWeighted(1048576), portsWhitelisted)
-		//lock: semaphore.NewWeighted(Ulimit()),
 		node[hostname] = ps.Start(1, 65535, 500*time.Millisecond)
 		s3cli.PutObjectToS3(producer.MapToString(node))
 	}

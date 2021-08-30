@@ -2,6 +2,8 @@ package infratest
 
 import (
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -19,12 +21,17 @@ func TestTerraformAwsS3Example(t *testing.T) {
 	expectedName := fmt.Sprintf("node-port-scanner-default-%s", strings.ToLower(random.UniqueId()))
 	expectedAcl := "private"
 
+	stateDirectory, err := ioutil.TempDir("", t.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+	stateFile := filepath.Join(stateDirectory, "backend.tfstate")
 	// Construct the terraform options with default retryable errors to handle the most common retryable errors in
 	// terraform testing.
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// The path to where our Terraform code is located
-		TerraformDir: "../",
-
+		TerraformDir:  "../",
+		BackendConfig: map[string]interface{}{"path": stateFile},
 		// Variables to pass to our Terraform code using -var options
 		Vars: map[string]interface{}{
 			"bucket_name": expectedName,
