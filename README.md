@@ -2,7 +2,7 @@
 
 Tool to scan ports opened at kubernetes nodes.
 
-## Requiremets
+## Requirements
 
 * Docker compose
 * Go 1.15
@@ -11,11 +11,9 @@ Tool to scan ports opened at kubernetes nodes.
 ## How it works
 
 k8s-port-scanner runs over any k8s cluster as daemonset looking for opened ports and saving the result on a s3 bucket.
-
 If you take a look into your bucket you should see as object as nodes you have, we are storing one file per node.
 
 k8s-port-scanner is listening for connections at port 8080. it has a subprocess to show you in a browser the relation node -> port.
-
 * In order achieve it you should do a `kubernetes port-forward pod 8080:8008`.
 
 ## Deployment

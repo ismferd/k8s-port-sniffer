@@ -34,9 +34,9 @@ release: unit_tests
 .PHONY: unit_tests
 unit_tests:
 	COMPOSE_HTTP_TIMEOUT=120 docker-compose up -d localstack
-	aws ${S3_LOCALSTACK_END} s3 mb s3://test
+	AWS_ACCESS_KEY_ID=${AWS_CREDENTIALS_TEST} AWS_SECRET_ACCESS_KEY=${AWS_CREDENTIALS_TEST} aws ${S3_LOCALSTACK_END} s3 mb s3://test
 	cd ./src; AWS_ACCESS_KEY_ID=${AWS_CREDENTIALS_TEST} AWS_SECRET_ACCESS_KEY=${AWS_CREDENTIALS_TEST} go test ./...
-	aws ${S3_LOCALSTACK_END} s3 rb s3://test --force
+	AWS_ACCESS_KEY_ID=${AWS_CREDENTIALS_TEST} AWS_SECRET_ACCESS_KEY=${AWS_CREDENTIALS_TEST} aws ${S3_LOCALSTACK_END} s3 rb s3://test --force
 	COMPOSE_HTTP_TIMEOUT=120 docker-compose down
 
 .PHONY: deploy_aws terratest 

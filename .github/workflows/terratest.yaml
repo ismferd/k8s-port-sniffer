@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
       - main
-  paths: 
-    - 'infrastructure/aws/**'
 
 env:
   tf_version: "0.13.5"

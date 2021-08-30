@@ -12,6 +12,7 @@ import (
 	"golang.org/x/sync/semaphore"
 )
 
+// PortScanner definition
 type PortScanner struct {
 	Hostname         string
 	Ip               string
@@ -23,6 +24,7 @@ func NewPortScanner(hostname string, ip string, lock *semaphore.Weighted, whitel
 	return &PortScanner{Hostname: hostname, Ip: ip, Lock: lock, WhitelistedPorts: whitelistedPorts}
 }
 
+// PortScanner method, where it returns ports opened or 0. It takes care about whitelisting ports.
 func (ps *PortScanner) ScanPort(ip string, port int, timeout time.Duration) int {
 	target := fmt.Sprintf("%s:%d", ip, port)
 	conn, err := net.DialTimeout("tcp", target, timeout)
@@ -60,6 +62,7 @@ func (ps *PortScanner) Start(f, l int, timeout time.Duration) []int {
 	return portList
 }
 
+// Convert from map to string
 func MapToString(node map[string][]int) string {
 	mJson, err := json.Marshal(node)
 	if err != nil {

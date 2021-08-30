@@ -24,6 +24,7 @@ func main() {
 	s3Session := aws.S3Session(region, s3Endpoint)
 	portsWhitelisted := strings.Split(os.Getenv("PORTS"), ",")
 
+	// Controlling input envars
 	if iterationTime < 60 {
 		log.Print("The loop time must be higher than 60")
 		os.Exit(1)
@@ -43,23 +44,26 @@ func main() {
 		log.Print("Var bucketName must be informed")
 		os.Exit(1)
 	}
+	// Showing the current config as STDOUT
 	log.Printf("Current Configuration: \n iterationTime %d, region: %s, s3Endpoint: %s bucketName: %s", iterationTime, region, s3Endpoint, bucketName)
 
+	// Making a s3 object
 	s3cli := aws.NewS3Cli(bucketName, s3Session, region)
 
+	// Go routine with the listener at 8080
 	go consumer.Consumer(s3cli)
 	node := make(map[string][]int)
+	// Main loop
 	for {
 		time.Sleep(time.Duration(iterationTime) * time.Second)
-		log.Print("executing")
-
 		hostname, err := os.Hostname()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-
+		// Making a new producer to scan ports
 		ps := producer.NewPortScanner(hostname, host, semaphore.NewWeighted(1048576), portsWhitelisted)
+		// Starting to scan ports
 		node[hostname] = ps.Start(1, 65535, 500*time.Millisecond)
 		s3cli.PutObjectToS3(producer.MapToString(node))
 	}
