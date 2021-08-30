@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+// S3cli definition
 type S3Cli struct {
 	BucketName string
 	S3Session  *s3.S3
@@ -22,26 +23,19 @@ func NewS3Cli(bucketName string, s3Session *s3.S3, region string) *S3Cli {
 	return &S3Cli{BucketName: bucketName, S3Session: s3Session, Region: region}
 }
 
+// Starts a s3 session
 func S3Session(region string, s3Endpoint string) *s3.S3 {
-	mySession := session.Must(session.NewSession(
-	/*&aws.Config{
-		//Credentials: credentials.NewStaticCredentials("foo", "var", ""),
-		Endpoint: aws.String(s3Endpoint),
-	}*/))
+	mySession := session.Must(session.NewSession())
 	return s3.New(mySession, aws.NewConfig().WithRegion(region).WithEndpoint(s3Endpoint).WithS3ForcePathStyle(true))
-	//return s3.New(mySession, aws.NewConfig())
 }
 
+// s3cli can put a new object in s3, the data comes from PorsScanner and print eTag if everything as expected.
 func (s3cli *S3Cli) PutObjectToS3(data string) {
-	//bucketName := os.Getenv("S3_BUCKET")
-
 	key, _ := os.Hostname()
 	input := &s3.PutObjectInput{
 		Body:   aws.ReadSeekCloser(strings.NewReader(data)),
 		Bucket: aws.String(s3cli.BucketName),
 		Key:    aws.String(key),
-		//ServerSideEncryption: aws.String("AES256"),
-		Tagging: aws.String("key1=value1&key2=value2"),
 	}
 
 	r, err := s3cli.S3Session.PutObject(input)
@@ -60,6 +54,7 @@ func (s3cli *S3Cli) PutObjectToS3(data string) {
 	fmt.Println(r)
 }
 
+// Getter objects from S3 returning the content as string
 func (s3cli *S3Cli) GetObjectsFromS3(object string) string {
 	getObject := &s3.GetObjectInput{
 		Bucket: aws.String(s3cli.BucketName),
@@ -87,15 +82,14 @@ func (s3cli *S3Cli) GetObjectsFromS3(object string) string {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(result.Body)
 	myFileContentAsString := buf.String()
-	fmt.Println(myFileContentAsString)
 	return myFileContentAsString
 }
 
+// This function will list the object in the bucket, calls GetObjectsFromS3 and will return an array with the information node -> port
 func (s3cli *S3Cli) ListObjectFromS3() []string {
 	s3Values := make([]string, 0)
 	input := &s3.ListObjectsV2Input{
 		Bucket: aws.String(s3cli.BucketName),
-		//MaxKeys: aws.Int64(2),
 	}
 
 	result, err := s3cli.S3Session.ListObjectsV2(input)
