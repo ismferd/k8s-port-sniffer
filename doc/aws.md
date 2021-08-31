@@ -1,6 +1,6 @@
-# AWS 
+# AWS 
 
-In order to store information collected by k8s-port-scanner of ports opened we need a s3 bucket.
+In order to store information collected by k8s-port-scanner of ports opened we will need a s3 bucket.
 
 ## Terraform
 
@@ -19,13 +19,13 @@ You can find the terraform code [here](infrastructure/aws).
 * skip_metadata_api_check: skip metadata api check, useful to use terratest, default = false.
 * skip_requesting_account_id: skip requesting account id, useful to use terratest, default = false.
 
-### Deployment
+### Deployment
 
-Running the command `make deploy_aws` you will need set both env vars:
+Running the command `make deploy_aws` you will need to set both env vars:
 * TF_VAR_aws_access_key
 * TF_VAR_aws_secret_key
 
-These both env vars will arrive to terraform to validate your credentials agains AWS.
+These both env vars will arrive to terraform to validate your credentials against AWS.
 
 `TF_VAR_aws_access_key=MY_AWS_KEY TF_VAR_aws_secret_key=MY_AWS_SECRET make deploy_aws` will do:
 - Up localstack.
