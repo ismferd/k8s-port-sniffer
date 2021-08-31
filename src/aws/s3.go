@@ -110,8 +110,8 @@ func (s3cli *S3Cli) ListObjectFromS3() []string {
 	}
 
 	for _, v := range result.Contents {
-		a := s3cli.GetObjectsFromS3(*v.Key)
-		s3Values = append(s3Values, a)
+		s3Object := s3cli.GetObjectsFromS3(*v.Key)
+		s3Values = append(s3Values, s3Object)
 		s3Values = append(s3Values, "\n")
 	}
 	return s3Values

@@ -59,7 +59,7 @@ func main() {
 	node := make(map[string][]int)
 	// Main loop
 	for {
-		time.Sleep(time.Duration(iterationTime) * time.Second)
+		log.Printf("Executing")
 		hostname, err := os.Hostname()
 		if err != nil {
 			fmt.Println(err)
@@ -69,6 +69,7 @@ func main() {
 		ps := producer.NewPortScanner(hostname, host, semaphore.NewWeighted(1048576), portsWhitelisted)
 		// Starting to scan ports
 		node[hostname] = ps.Start(1, 65535, 500*time.Millisecond)
-		s3cli.PutObjectToS3(producer.MapToString(node))
+		go s3cli.PutObjectToS3(producer.MapToString(node))
+		time.Sleep(time.Duration(iterationTime) * time.Second)
 	}
 }
